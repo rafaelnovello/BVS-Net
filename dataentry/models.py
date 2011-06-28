@@ -26,8 +26,8 @@ class Instance(models.Model):
         max_length=50) #Need to be a multi value attribute
     portal_type = models.CharField(u'Tipo do Portal', max_length=1,
         choices=PORTAL_TYPES)
-    certification_date = models.DateField(u'Data de Certificação')
-    conformation_url = models.URLField(u'Endereço da Corformação do Comitê')
+    certification_date = models.DateField(u'Data de Certificação', blank=True)
+    conformation_url = models.URLField(u'Endereço da Corformação do Comitê', blank=True)
     
     def __unicode__(self):
         return self.name
@@ -48,17 +48,17 @@ class Responsible(models.Model):
     instances = models.ManyToManyField(Instance, verbose_name="Instancias")
     name = models.CharField(u'Nome', max_length=50)
     initial_date = models.DateField(u'Data de inicio do Acompanhamento')
-    final_date = models.DateField(u'Data de fim do Acompanhamento')
+    final_date = models.DateField(u'Data de fim do Acompanhamento', blank=True)
     
     def __unicode__(self):
         return self.name
     
 class Evaluation(models.Model):
     class Meta:
-        verbose_name = u'Avalicão'
+        verbose_name = u'Avaliação'
         verbose_name_plural = u'Avaliações'
     
-    instance = models.ForeignKey(Instance, verbose_name=u'Instancia')
+    instance = models.ForeignKey(Instance, verbose_name=u'Instância')
     avaliator = models.CharField(u'Avaliador', max_length=50)
     note = models.TextField(u'Nota', max_length=300)
     date = models.DateField(u'Data da avaliação')
@@ -69,6 +69,9 @@ class Evaluation(models.Model):
     is_committe_active = models.BooleanField(
         u'Instancia com comitê ativo')
     
+    def __unicode__(self):
+        return self.instance
+    
     
 class Contact(models.Model):
     class Meta:
@@ -78,7 +81,7 @@ class Contact(models.Model):
     instances = models.ManyToManyField(Instance, verbose_name=u'Instancias')
     name = models.CharField(u'Nome', max_length=50)
     institution = models.CharField(u'Instituição', max_length=100)
-    role = models.CharField(u'Cargo', max_length=50)
+    role = models.CharField(u'Cargo', max_length=50, blank=True)
     
     def __unicode__(self):
         return self.name
@@ -89,6 +92,9 @@ class ContactPhone(models.Model):
     
     contact = models.ForeignKey(Contact, verbose_name=u'Contato da BVS')
     phone = models.CharField(u'Telefone', max_length=14)
+
+    def __unicode__(self):
+        return self.contact
     
 class ContactEmail(models.Model):
     class Meta:
@@ -96,6 +102,9 @@ class ContactEmail(models.Model):
     
     contact = models.ForeignKey(Contact, verbose_name=u'Contato da BVS')
     email = models.EmailField()
+
+    def __unicode__(self):
+        return self.contact
 
 
 class InformationSource(models.Model):

@@ -2,83 +2,12 @@
 
 from django.db import models
 
-class Instance(models.Model):
-    STATUS_TYPES = (
-        (u'P', u'Piloto'),
-        (u'C', u'Certificado'),
-        (u'D', u'Em Desenvolvimento'),
-        (u'T', u'Temporário'),
-        (u'F', u'Desativado'),
-    )
-    PORTAL_TYPES = (
-        (u'T', u'Temático'),
-        (u'N', u'Nacional'),
-        (u'I', u'Institucional'),
-    )
-    
-    class Meta:
-        verbose_name = u'Instancia BVS'
-        verbose_name_plural = u'Instancias BVS'
-    
-    name = models.CharField(u'Nome', max_length=200)
-    status = models.CharField(u'Status', max_length=1, choices=STATUS_TYPES)
-    interface = models.CharField(u'Gerenciador de Interface', 
-        max_length=50) #Need to be a multi value attribute
-    portal_type = models.CharField(u'Tipo do Portal', max_length=1,
-        choices=PORTAL_TYPES)
-    certification_date = models.DateField(u'Data de Certificação', blank=True)
-    conformation_url = models.URLField(u'Endereço da Corformação do Comitê', blank=True)
-    
-    def __unicode__(self):
-        return self.name
-
-class InstanceNotes(models.Model):
-    class Meta:
-        verbose_name = u'Nota da Instancia BVS'
-        verbose_name_plural = u'Notas da Instancia BVS'
-        
-    instance = models.ForeignKey(Instance, verbose_name=u'Instancia')
-    note = models.TextField(u'Notas', max_length=300)
-    
-class Responsible(models.Model):
-    class Meta:
-        verbose_name = u'Responsável'
-        verbose_name_plural = u'Responsáveis'
-    
-    instances = models.ManyToManyField(Instance, verbose_name="Instancias")
-    name = models.CharField(u'Nome', max_length=50)
-    initial_date = models.DateField(u'Data de inicio do Acompanhamento')
-    final_date = models.DateField(u'Data de fim do Acompanhamento', blank=True)
-    
-    def __unicode__(self):
-        return self.name
-    
-class Evaluation(models.Model):
-    class Meta:
-        verbose_name = u'Avaliação'
-        verbose_name_plural = u'Avaliações'
-    
-    instance = models.ForeignKey(Instance, verbose_name=u'Instância')
-    avaliator = models.CharField(u'Avaliador', max_length=50)
-    note = models.TextField(u'Nota', max_length=300)
-    date = models.DateField(u'Data da avaliação')
-    is_instance_available = models.BooleanField(
-        u'Instancia ativa')
-    is_minutes_available = models.BooleanField(
-        u'Instancia com atas publicadas')
-    is_committe_active = models.BooleanField(
-        u'Instancia com comitê ativo')
-    
-    def __unicode__(self):
-        return self.instance
-    
-    
 class Contact(models.Model):
     class Meta:
         verbose_name = u'Contato da BVS'
         verbose_name_plural = u'Contatos das BVSs'
     
-    instances = models.ManyToManyField(Instance, verbose_name=u'Instancias')
+    #instances = models.ManyToManyField(Instance, verbose_name=u'Instancias', blank=True)
     name = models.CharField(u'Nome', max_length=50)
     institution = models.CharField(u'Instituição', max_length=100)
     role = models.CharField(u'Cargo', max_length=50, blank=True)
@@ -106,6 +35,77 @@ class ContactEmail(models.Model):
     def __unicode__(self):
         return self.contact
 
+class Evaluation(models.Model):
+    class Meta:
+        verbose_name = u'Avaliação'
+        verbose_name_plural = u'Avaliações'
+    
+    avaliator = models.CharField(u'Avaliador', max_length=50)
+    note = models.TextField(u'Nota', max_length=300)
+    date = models.DateField(u'Data da avaliação')
+    is_instance_available = models.BooleanField(
+        u'Instancia ativa')
+    is_minutes_available = models.BooleanField(
+        u'Instancia com atas publicadas')
+    is_committe_active = models.BooleanField(
+        u'Instancia com comitê ativo')
+    
+    def __unicode__(self):
+        return self.instance 
+
+class Responsible(models.Model):
+    class Meta:
+        verbose_name = u'Responsável'
+        verbose_name_plural = u'Responsáveis'
+    
+    #instances = models.ManyToManyField(Instance, verbose_name="Instancias")
+    name = models.CharField(u'Nome', max_length=50)
+    initial_date = models.DateField(u'Data de inicio do Acompanhamento')
+    final_date = models.DateField(u'Data de fim do Acompanhamento', blank=True)
+    
+    def __unicode__(self):
+        return self.name  
+
+class Instance(models.Model):
+    STATUS_TYPES = (
+        (u'P', u'Piloto'),
+        (u'C', u'Certificado'),
+        (u'D', u'Em Desenvolvimento'),
+        (u'T', u'Temporário'),
+        (u'F', u'Desativado'),
+    )
+    PORTAL_TYPES = (
+        (u'T', u'Temático'),
+        (u'N', u'Nacional'),
+        (u'I', u'Institucional'),
+    )
+    
+    class Meta:
+        verbose_name = u'Instancia BVS'
+        verbose_name_plural = u'Instancias BVS'
+    
+    name = models.CharField(u'Nome', max_length=200)
+    status = models.CharField(u'Status', max_length=1, choices=STATUS_TYPES)
+    interface = models.CharField(u'Gerenciador de Interface', 
+        max_length=50) #Need to be a multi value attribute
+    portal_type = models.CharField(u'Tipo do Portal', max_length=1,
+        choices=PORTAL_TYPES)
+    certification_date = models.DateField(u'Data de Certificação', blank=True)
+    conformation_url = models.URLField(u'Endereço da Corformação do Comitê', blank=True)
+    contacts = models.ManyToManyField(Contact, verbose_name=u'Contato', blank=True)
+    evaluation = models.ForeignKey(Evaluation, verbose_name=u'Avaliações', blank=True)
+    responsible = models.ManyToManyField(Responsible, verbose_name=u'Responsáveis')
+    
+    def __unicode__(self):
+        return self.name
+
+class InstanceNotes(models.Model):
+    class Meta:
+        verbose_name = u'Nota da Instancia BVS'
+        verbose_name_plural = u'Notas da Instancia BVS'
+        
+    instance = models.ForeignKey(Instance, verbose_name=u'Instancia')
+    note = models.TextField(u'Notas', max_length=300)
 
 class InformationSource(models.Model):
     class Meta:
@@ -120,16 +120,15 @@ class InformationSource(models.Model):
     
     def __unicode__(self):
         return self.name
-    
+
 class Server(models.Model):
     class Meta:
         verbose_name = u'Servidor'
         verbose_name_plural = u'Servidores'
         
     information_source = models.ManyToManyField(InformationSource, 
-        verbose_name=u'Instancias')
+        verbose_name=u'Fontes de Informação')
     name = models.CharField(u'Nome', max_length=50)
     
     def __unicode__(self):
         return self.name
-    

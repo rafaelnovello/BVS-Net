@@ -59,10 +59,10 @@ class ContactEmailAdmin(admin.ModelAdmin):
 
 admin.site.register(Instance, InstanceAdmin)
 #admin.site.register(InstanceNotes, InstanceNotesAdmin)
-#admin.site.register(Responsible)
+admin.site.register(Responsible)
 #admin.site.register(Evaluation, EvaluationAdmin)
 #admin.site.register(InformationSource)
 #admin.site.register(Server)
-#admin.site.register(Contact, ContactAdmin)
+admin.site.register(Contact, ContactAdmin)
 #admin.site.register(ContactPhone, ContactPhoneAdmin)
 #admin.site.register(ContactEmail, ContactEmailAdmin)

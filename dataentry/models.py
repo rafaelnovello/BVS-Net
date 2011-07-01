@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 
 from django.db import models
 
@@ -23,7 +23,7 @@ class ContactPhone(models.Model):
     phone = models.CharField(u'Telefone', max_length=14)
 
     def __unicode__(self):
-        return self.contact
+        return self.contact.name
     
 class ContactEmail(models.Model):
     class Meta:
@@ -33,7 +33,7 @@ class ContactEmail(models.Model):
     email = models.EmailField()
 
     def __unicode__(self):
-        return self.contact
+        return self.contact.name
 
 class Evaluation(models.Model):
     class Meta:
@@ -90,10 +90,14 @@ class Instance(models.Model):
         max_length=50) #Need to be a multi value attribute
     portal_type = models.CharField(u'Tipo do Portal', max_length=1,
         choices=PORTAL_TYPES)
-    certification_date = models.DateField(u'Data de Certificação', blank=True)
-    conformation_url = models.URLField(u'Endereço da Corformação do Comitê', blank=True)
-    contacts = models.ManyToManyField(Contact, verbose_name=u'Contato', blank=True)
-    evaluation = models.ForeignKey(Evaluation, verbose_name=u'Avaliações', blank=True)
+    certification_date = models.DateField(u'Data de Certificação', 
+        blank=True, null=True)
+    conformation_url = models.URLField(u'Endereço da Corformação do Comitê', 
+        blank=True)
+    contacts = models.ManyToManyField(Contact, verbose_name=u'Contato', 
+        blank=True)
+    evaluation = models.ForeignKey(Evaluation, verbose_name=u'Avaliações', 
+        blank=True, null=True)
     responsible = models.ManyToManyField(Responsible, verbose_name=u'Responsáveis')
     
     def __unicode__(self):

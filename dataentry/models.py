@@ -111,6 +111,18 @@ class InstanceNotes(models.Model):
     instance = models.ForeignKey(Instance, verbose_name=u'Instancia')
     note = models.TextField(u'Notas', max_length=300)
 
+class Server(models.Model):
+    class Meta:
+        verbose_name = u'Servidor'
+        verbose_name_plural = u'Servidores'
+        
+    #information_source = models.ManyToManyField(InformationSource, 
+     #   verbose_name=u'Fontes de Informação')
+    name = models.CharField(u'Nome', max_length=50)
+    
+    def __unicode__(self):
+        return self.name
+
 class InformationSource(models.Model):
     class Meta:
         verbose_name = u'Fonte de Informação'
@@ -121,18 +133,8 @@ class InformationSource(models.Model):
     url = models.CharField(u'URL', max_length=150)
     source_type = models.CharField(u'Tipo da Fonte de Informação', max_length=150)
     aplication = models.CharField(u'Aplicação usada', max_length=50)
-    
-    def __unicode__(self):
-        return self.name
-
-class Server(models.Model):
-    class Meta:
-        verbose_name = u'Servidor'
-        verbose_name_plural = u'Servidores'
-        
-    information_source = models.ManyToManyField(InformationSource, 
-        verbose_name=u'Fontes de Informação')
-    name = models.CharField(u'Nome', max_length=50)
+    server = models.ManyToManyField(Server, 
+       verbose_name=u'Servidor')
     
     def __unicode__(self):
         return self.name

@@ -27,7 +27,7 @@ class InstanceNotesAdmin(admin.TabularInline):
 class InformationSourceAdmin(admin.TabularInline):
 	model = InformationSource
 	fieldsets = [
-		(None, {'fields' : ['name','url', 'source_type', 'aplication']}),
+		(None, {'fields' : ['name','url', 'source_type', 'aplication', 'server']}),
 	]
 	extra = 1
 
@@ -58,11 +58,6 @@ class ContactEmailAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Instance, InstanceAdmin)
-#admin.site.register(InstanceNotes, InstanceNotesAdmin)
 admin.site.register(Responsible)
-#admin.site.register(Evaluation, EvaluationAdmin)
-#admin.site.register(InformationSource)
-#admin.site.register(Server)
+admin.site.register(Server)
 admin.site.register(Contact, ContactAdmin)
-#admin.site.register(ContactPhone, ContactPhoneAdmin)
-#admin.site.register(ContactEmail, ContactEmailAdmin)

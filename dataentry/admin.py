@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-	
 from bvsnet.dataentry.models import *
-#from bvsnet.dataentry import 
 from django.contrib import admin
 
 class ContactPhoneAdmin(admin.TabularInline):
@@ -30,32 +29,32 @@ class InformationSourceAdmin(admin.TabularInline):
 		(None, {'fields' : ['name','url', 'source_type', 'aplication', 'server']}),
 	]
 	extra = 1
+    
+class EvaluationAdmin(admin.TabularInline):
+    model = Evaluation
+    fieldsets = [
+        (None, {'fields' : ['avaliator', 'date', 'is_instance_available', 
+                'is_minutes_available', 'is_committe_active', 'note']}),
+    ]
+    extra = 1
 
 class InstanceAdmin(admin.ModelAdmin):
     list_display = ('name', 'status', 'portal_type')
     fieldsets = [
-		(None, {'fields' : ['name', 'portal_type', 'status', 'interface', 'contacts', 'evaluation', 'responsible']}),
+		(None, {'fields' : ['name', 'portal_type', 'status', 'interface', 'contacts', 'responsible']}),
 		('Certificação', {'fields' : ['certification_date', 'conformation_url']}),
 	]
-    inlines = [InstanceNotesAdmin, InformationSourceAdmin]
+    inlines = [InstanceNotesAdmin, InformationSourceAdmin, EvaluationAdmin]
     
 class InstanceNotesAdmin(admin.ModelAdmin):
     list_display = ('instance', 'note')
     
-class EvaluationAdmin(admin.ModelAdmin):
-    list_display = ('avaliator', 'date')
     
 class ContactAdmin(admin.ModelAdmin):
     list_display = ('name', 'institution')
     fields = ('name', 'institution', 'role')
     inlines = [ContactPhoneAdmin, ContactEmailAdmin]
     
-'''class ContactPhoneAdmin(admin.ModelAdmin):
-    list_display = ('contact', 'phone')
-
-class ContactEmailAdmin(admin.ModelAdmin):
-    list_display = ('contact', 'email')'''
-
 
 admin.site.register(Instance, InstanceAdmin)
 admin.site.register(Responsible)

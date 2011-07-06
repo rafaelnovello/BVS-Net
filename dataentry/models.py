@@ -80,6 +80,7 @@ class Instance(models.Model):
     
     def __unicode__(self):
         return self.name
+            
 
 class InstanceNotes(models.Model):
     class Meta:
@@ -106,7 +107,7 @@ class Evaluation(models.Model):
     note = models.TextField(u'Nota', max_length=300)
     
     def __unicode__(self):
-        return self.instance 
+        return self.instace.name
         
         
 class Server(models.Model):

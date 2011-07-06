@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-	
 from bvsnet.dataentry.models import *
 from django.contrib import admin
+from django import forms
 
 class ContactPhoneAdmin(admin.TabularInline):
 	model = ContactPhone
@@ -38,7 +39,22 @@ class EvaluationAdmin(admin.TabularInline):
     ]
     extra = 1
 
+class InstanceForm(forms.ModelForm):
+    class Meta:
+        model = Instance
+    
+    def clean_certification_date(self):
+        date = self.cleaned_data['certification_date']
+        status = self.cleaned_data['status']
+        
+        if status == 'C' and date is None:
+            raise forms.ValidationError(u'Você esqueceu a data de certificação')
+        
+        return date    
+        
+        
 class InstanceAdmin(admin.ModelAdmin):
+    form = InstanceForm
     list_display = ('name', 'status', 'portal_type')
     fieldsets = [
 		(None, {'fields' : ['name', 'portal_type', 'status', 'interface', 'contacts', 'responsible']}),

@@ -41,7 +41,7 @@ class Responsible(models.Model):
     
     name = models.CharField(u'Nome', max_length=50)
     initial_date = models.DateField(u'Data de inicio do Acompanhamento')
-    final_date = models.DateField(u'Data de fim do Acompanhamento', blank=True)
+    final_date = models.DateField(u'Data de fim do Acompanhamento', null=True, blank=True)
     
     def __unicode__(self):
         return self.name  
